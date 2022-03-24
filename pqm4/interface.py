@@ -10,7 +10,7 @@ def parse_arguments():
         "-p",
         "--platform",
         help="The PQM4 platform",
-        choices=["stm32f4discovery", "nucleo-l476rg", "nucleo-l4r5zi", "cw308t-stm32f3", "mps2-an386"],
+        choices=["stm32f4discovery", "nucleo-l476rg", "nucleo-l4r5zi", "cw308t-stm32f3", "cw308t-stm32f4", "mps2-an386"],
         default="stm32f4discovery",
     )
     parser.add_argument(
@@ -39,7 +39,7 @@ def get_platform(args):
     elif args.platform == "nucleo-l4r5zi":
         bin_type = 'hex'
         platform = platforms.OpenOCD("st_nucleo_l4r5.cfg", args.uart)
-    elif args.platform == "cw308t-stm32f3":
+    elif args.platform == "cw308t-stm32f3" or args.platform == "cw308t-stm32f4":
         bin_type = 'hex'
         platform = platforms.ChipWhisperer()
     elif args.platform == 'mps2-an386':
@@ -66,6 +66,7 @@ class M4Settings(mupq.PlatformSettings):
         'stm32f4discovery': 128*1024,
         'nucleo-l476rg': 128*1024,
         'cw308t-stm32f3': 64*1024,
+        'cw308t-stm32f4': 128*1024,
         'mps2-an386': 4096*1024,
         'nucleo-l4r5zi': 640*1024
     }
