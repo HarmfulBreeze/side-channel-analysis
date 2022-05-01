@@ -1,0 +1,5 @@
+
+[c:SingleDeclarationPerStatement6"0Define each identifier in a dedicated statement.(‡‘Õ©
+uc:S995ƒ"]Make the type of this parameter a pointer-to-const. The current type of "r" is "aes128ctx *".(½†Òéúÿÿÿÿ
+\c:SingleDeclarationPerStatementš"0Define each identifier in a dedicated statement.(‡‘Õ©
+pc:S995å"]Make the type of this parameter a pointer-to-const. The current type of "r" is "aes256ctx *".(ıŒ‚

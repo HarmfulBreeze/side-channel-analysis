@@ -1,0 +1,13 @@
+
+R	cpp:S5945
+"=Use "std::array" or "std::vector" instead of a C-style array.(ùü¾¦
+U	cpp:S5416	";"using" should be preferred to "typedef" for type aliasing.(Òº¾“üÿÿÿÿ
+G	cpp:S5945"2Use "std::string" instead of a C-style char array.(œ’æø
+L	cpp:S5945"2Use "std::string" instead of a C-style char array.(§ÚŞ¦úÿÿÿÿ
+R	cpp:S59450"=Use "std::array" or "std::vector" instead of a C-style array.(£™€¢
+U	cpp:S5416/";"using" should be preferred to "typedef" for type aliasing.(Òº¾“üÿÿÿÿ
+G	cpp:S59454"2Use "std::string" instead of a C-style char array.(›¨‹¶
+G	cpp:S5945["2Use "std::string" instead of a C-style char array.(¦ùé
+R	cpp:S5945^"=Use "std::array" or "std::vector" instead of a C-style array.(ÑŒÊ¼
+G	cpp:S5945^"2Use "std::string" instead of a C-style char array.(ÑŒÊ¼
+Q	cpp:S5945a"=Use "std::array" or "std::vector" instead of a C-style array.(Û”üW

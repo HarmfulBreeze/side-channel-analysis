@@ -8,4 +8,7 @@ EXCLUDED_SCHEMES = \
     crypto_sign/falcon-1024% \
     mupq/pqclean/crypto_sign/rainbow% \
 
+CPPFLAGS += \
+	-DCW308_STM32F4
+
 include mk/opencm3.mk

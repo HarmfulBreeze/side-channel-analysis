@@ -170,12 +170,11 @@ class ChipWhisperer(mupq.Platform):
             data += self.target.read()
             match = self.start_pat.match(data)
         # Remove the start pattern
-        data = data[:match.end() - 1]
+        data = data[:match.end()]
         # Wait for the end
         match = None
         while match is None:
             data += self.target.read()
-            print(data)
             match = self.end_pat.match(data)
         # Remove stop pattern and return
         return data[:match.end() - 2]
