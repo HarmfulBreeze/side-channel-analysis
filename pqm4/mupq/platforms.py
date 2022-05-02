@@ -175,6 +175,7 @@ class ChipWhisperer(mupq.Platform):
         match = None
         while match is None:
             data += self.target.read()
+            print(data)
             match = self.end_pat.match(data)
         # Remove stop pattern and return
         return data[:match.end() - 2]

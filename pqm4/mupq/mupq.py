@@ -286,6 +286,8 @@ class TestVectors(BoardTestCase):
     def run_test(self, implementation):
         checksum = self.hash_output(
             super().run_test(implementation).encode('utf-8'))
+        print("our output", checksum)
+        print("expected", self.testvectorhash[implementation.scheme])
         assert self.testvectorhash[implementation.scheme] == checksum
 
     def run_make(self, target, path, namespace):

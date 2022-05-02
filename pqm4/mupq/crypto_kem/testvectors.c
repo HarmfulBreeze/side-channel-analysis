@@ -8,8 +8,10 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <libopencm3/stm32/gpio.h>
 
 #define NTESTS 2
+#define NNOISE 15
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
 #define EVALUATOR(x, y) PASTER(x, y)
@@ -27,6 +29,7 @@
 #define MUPQ_crypto_kem_dec NAMESPACE(crypto_kem_dec)
 
 typedef uint32_t uint32;
+
 
 static void printbytes(const unsigned char *x, unsigned long long xlen)
 {
@@ -91,27 +94,45 @@ int main(void)
   int i,j;
 
   hal_setup(CLOCK_FAST);
+  //setup
+  gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
+  gpio_set_output_options(GPIOA,GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO12);
+
+  //trigger_high();
+  gpio_set(GPIOA, GPIO12);
 
   hal_send_str("==========================");
 
   for(i=0;i<NTESTS;i++)
   {
+
     // Key-pair generation
     MUPQ_crypto_kem_keypair(pk, sk_a);
 
-    printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
-    printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
+    // printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
+    // printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
 
-    // Encapsulation
-    MUPQ_crypto_kem_enc(sendb, key_b, pk);
+    for (int j = 0; i < NNOISE; j++) {
+      //trigger_high();
+      gpio_set(GPIOA, GPIO12);
 
-    printbytes(sendb,MUPQ_CRYPTO_CIPHERTEXTBYTES);
-    printbytes(key_b,MUPQ_CRYPTO_BYTES);
+      // Encapsulation
+      MUPQ_crypto_kem_enc(sendb, key_b, pk);
 
-    // Decapsulation
-    MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
+      
 
-    printbytes(key_a,MUPQ_CRYPTO_BYTES);
+      // printbytes(sendb,MUPQ_CRYPTO_CIPHERTEXTBYTES);
+      // printbytes(key_b,MUPQ_CRYPTO_BYTES);
+
+      // Decapsulation
+      MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
+
+      // printbytes(key_a,MUPQ_CRYPTO_BYTES);
+
+      //trigger_low();
+      gpio_clear(GPIOA, GPIO12);
+      MUPQ_crypto_kem_dec(key_a, sendb, sk_a); // pseudo-sleep
+    }
 
     for(j=0;j<MUPQ_CRYPTO_BYTES;j++)
     {
@@ -125,5 +146,6 @@ int main(void)
   }
 
   hal_send_str("#");
+  
   return 0;
 }

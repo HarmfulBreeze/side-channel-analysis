@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <libopencm3/stm32/gpio.h>
 
 #define MAXMLEN 2048
 
@@ -97,20 +98,29 @@ int main(void)
 
   hal_setup(CLOCK_FAST);
 
+  //setup
+  gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
+  gpio_set_output_options(GPIOA,GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO12);
+
+  //trigger_high();
+  gpio_set(GPIOA, GPIO12);
+
   hal_send_str("==========================");
 
   for(i=0; i<MAXMLEN; i=(i==0)?i+1:i<<1)
   {
+    gpio_set(GPIOA, GPIO12);
+
     randombytes(mi,i);
 
     MUPQ_crypto_sign_keypair(pk, sk);
 
-    printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
-    printbytes(sk,MUPQ_CRYPTO_SECRETKEYBYTES);
+    // printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
+    // printbytes(sk,MUPQ_CRYPTO_SECRETKEYBYTES);
 
     MUPQ_crypto_sign(sm, &smlen, mi, i, sk);
 
-    printbytes(sm, smlen);
+    // printbytes(sm, smlen);
 
     // By relying on m == sm we prevent having to allocate CRYPTO_BYTES twice
     r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
@@ -121,6 +131,9 @@ int main(void)
       hal_send_str("#");
       return -1;
     }
+    //trigger_low();
+    gpio_clear(GPIOA, GPIO12);
+
     for(j=0;j<i;j++)
     {
       if(sm[j]!=mi[j])
