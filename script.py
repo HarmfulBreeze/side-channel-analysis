@@ -58,11 +58,12 @@ reset_target(scope)
 
 plt.figure()
 
-arr = avg_trace(2, 15)
+arr = avg_trace(1, 15)
 # arr = separate_trace(1, 5)
 for i in arr:
     plt.plot(i)
-
+outfile = "trace_bike_1_15.npy"
+np.save(outfile, arr)
 scope.dis()
 target.dis()
 plt.show()

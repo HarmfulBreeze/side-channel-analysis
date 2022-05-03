@@ -10,7 +10,7 @@
 #include <string.h>
 #include <libopencm3/stm32/gpio.h>
 
-#define NTESTS 2
+#define NTESTS 1
 #define NNOISE 15
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
@@ -109,8 +109,8 @@ int main(void)
     // Key-pair generation
     MUPQ_crypto_kem_keypair(pk, sk_a);
 
-    // printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
-    // printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
+    printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
+    printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
 
     for (int j = 0; i < NNOISE; j++) {
       //trigger_high();
