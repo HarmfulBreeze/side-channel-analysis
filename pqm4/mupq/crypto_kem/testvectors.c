@@ -11,7 +11,7 @@
 #include <libopencm3/stm32/gpio.h>
 
 #define NTESTS 1
-#define NNOISE 15
+#define NNOISE 3
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
 #define EVALUATOR(x, y) PASTER(x, y)
@@ -105,7 +105,6 @@ int main(void)
 
   for(i=0;i<NTESTS;i++)
   {
-
     // Key-pair generation
     MUPQ_crypto_kem_keypair(pk, sk_a);
 
@@ -113,28 +112,26 @@ int main(void)
     printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
 
     for (int j = 0; i < NNOISE; j++) {
-      //trigger_high();
-      gpio_set(GPIOA, GPIO12);
-
       // Encapsulation
       MUPQ_crypto_kem_enc(sendb, key_b, pk);
-
-      
 
       // printbytes(sendb,MUPQ_CRYPTO_CIPHERTEXTBYTES);
       // printbytes(key_b,MUPQ_CRYPTO_BYTES);
 
+      // printbytes(key_a,MUPQ_CRYPTO_BYTES);
+
+      //trigger_high(); 
+      gpio_set(GPIOA, GPIO12);
+      
       // Decapsulation
       MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
 
-      // printbytes(key_a,MUPQ_CRYPTO_BYTES);
-
       //trigger_low();
       gpio_clear(GPIOA, GPIO12);
-      MUPQ_crypto_kem_dec(key_a, sendb, sk_a); // pseudo-sleep
+      // MUPQ_crypto_kem_dec(key_a, sendb, sk_a); // pseudo-sleep
     }
 
-    for(j=0;j<MUPQ_CRYPTO_BYTES;j++)
+    /* for(j=0;j<MUPQ_CRYPTO_BYTES;j++)
     {
       if(key_a[j] != key_b[j])
       {
@@ -142,10 +139,8 @@ int main(void)
         hal_send_str("#");
         return -1;
       }
-    }
+    } */
   }
-
   hal_send_str("#");
-  
   return 0;
 }
