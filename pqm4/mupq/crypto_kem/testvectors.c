@@ -112,34 +112,21 @@ int main(void)
     printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
 
     for (int j = 0; i < NNOISE; j++) {
-      // Encapsulation
-      MUPQ_crypto_kem_enc(sendb, key_b, pk);
-
-      // printbytes(sendb,MUPQ_CRYPTO_CIPHERTEXTBYTES);
-      // printbytes(key_b,MUPQ_CRYPTO_BYTES);
-
-      // printbytes(key_a,MUPQ_CRYPTO_BYTES);
-
       //trigger_high(); 
       gpio_set(GPIOA, GPIO12);
+
+      // Encapsulation
+      MUPQ_crypto_kem_enc(sendb, key_b, pk);
       
       // Decapsulation
       MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
 
       //trigger_low();
       gpio_clear(GPIOA, GPIO12);
-      // MUPQ_crypto_kem_dec(key_a, sendb, sk_a); // pseudo-sleep
-    }
 
-    /* for(j=0;j<MUPQ_CRYPTO_BYTES;j++)
-    {
-      if(key_a[j] != key_b[j])
-      {
-        hal_send_str("ERROR");
-        hal_send_str("#");
-        return -1;
-      }
-    } */
+      // pseudo-sleep
+      MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
+    }
   }
   hal_send_str("#");
   return 0;

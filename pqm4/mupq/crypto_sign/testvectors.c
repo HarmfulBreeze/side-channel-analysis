@@ -97,13 +97,10 @@ int main(void)
   int r;
   size_t i,j;
 
+  // setup
   hal_setup(CLOCK_FAST);
-
-  //setup
   gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
   gpio_set_output_options(GPIOA,GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO12);
-
-  hal_send_str("==========================");
 
   for(i=MAXMLEN; i<=MAXMLEN; i=(i==0)?i+1:i<<1)
   {
@@ -111,39 +108,21 @@ int main(void)
 
     MUPQ_crypto_sign_keypair(pk, sk);
 
-    // printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
-    // printbytes(sk,MUPQ_CRYPTO_SECRETKEYBYTES);
-
     for (int j = 0; j < NNOISE; j++) {
-      //trigger_high();
+      // trigger_high();
       gpio_set(GPIOA, GPIO12);
 
+      // signature
       MUPQ_crypto_sign(sm, &smlen, mi, i, sk);
 
-      // printbytes(sm, smlen);
-
-      // By relying on m == sm we prevent having to allocate CRYPTO_BYTES twice
+      // signature open
       r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
 
-      //trigger_low();
+      // trigger_low();
       gpio_clear(GPIOA, GPIO12);
-    }
 
-    if(r)
-    {
-      hal_send_str("ERROR: signature verification failed");
-      hal_send_str("#");
-      return -1;
-    }
-
-    for(j=0;j<i;j++)
-    {
-      if(sm[j]!=mi[j])
-      {
-        hal_send_str("ERROR: message recovery failed");
-        hal_send_str("#");
-        return -1;
-      }
+      // pseudo-sleep
+      r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
     }
   }
 
