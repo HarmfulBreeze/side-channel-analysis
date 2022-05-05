@@ -11,7 +11,7 @@
 #include <libopencm3/stm32/gpio.h>
 
 #define NTESTS 1
-#define NNOISE 1
+#define NNOISE 10
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
 #define EVALUATOR(x, y) PASTER(x, y)
@@ -105,10 +105,10 @@ int main(void)
     // Key-pair generation
     MUPQ_crypto_kem_keypair(pk, sk_a);
 
+    // Encapsulation
+    MUPQ_crypto_kem_enc(sendb, key_b, pk);
+
     for (int j = 0; i < NNOISE; j++) {
-      // Encapsulation
-      MUPQ_crypto_kem_enc(sendb, key_b, pk);
-      
       //trigger_high(); 
       gpio_set(GPIOA, GPIO12);
 

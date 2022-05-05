@@ -53,7 +53,7 @@ reset_target(scope)
 
 # Setup plot and capture trace
 plt.figure()
-arr = avg_trace(1, 1)
+arr = avg_trace(1, 10)
 # arr = separate_trace(1, 5)
 for i in arr:
     plt.plot(i)
