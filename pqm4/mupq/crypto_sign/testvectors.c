@@ -12,7 +12,7 @@
 
 #define MAXMLEN 2048
 #define NTESTS  1
-#define NNOISE  15
+#define NNOISE  1
 
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
@@ -115,7 +115,7 @@ int main(void)
 
       // trigger_high();
       gpio_set(GPIOA, GPIO12);
-      
+
       // signature open
       r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
 
@@ -123,7 +123,7 @@ int main(void)
       gpio_clear(GPIOA, GPIO12);
 
       // pseudo-sleep
-      r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
+      // r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
     }
   }
 

@@ -11,7 +11,7 @@
 #include <libopencm3/stm32/gpio.h>
 
 #define NTESTS 1
-#define NNOISE 3
+#define NNOISE 1
 // https://stackoverflow.com/a/1489985/1711232
 #define PASTER(x, y) x##y
 #define EVALUATOR(x, y) PASTER(x, y)
@@ -119,7 +119,7 @@ int main(void)
       gpio_clear(GPIOA, GPIO12);
 
       // pseudo-sleep
-      MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
+      // MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
     }
   }
   hal_send_str("#");
