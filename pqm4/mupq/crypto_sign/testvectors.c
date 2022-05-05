@@ -11,6 +11,7 @@
 #include <libopencm3/stm32/gpio.h>
 
 #define MAXMLEN 2048
+#define NTESTS  1
 #define NNOISE  15
 
 // https://stackoverflow.com/a/1489985/1711232
@@ -102,19 +103,19 @@ int main(void)
   gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
   gpio_set_output_options(GPIOA,GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO12);
 
-  for(i=MAXMLEN; i<=MAXMLEN; i=(i==0)?i+1:i<<1)
+  for(i = 0; i < NTESTS; i++)
   {
     randombytes(mi,i);
 
     MUPQ_crypto_sign_keypair(pk, sk);
 
     for (int j = 0; j < NNOISE; j++) {
-      // trigger_high();
-      gpio_set(GPIOA, GPIO12);
-
       // signature
       MUPQ_crypto_sign(sm, &smlen, mi, i, sk);
 
+      // trigger_high();
+      gpio_set(GPIOA, GPIO12);
+      
       // signature open
       r = MUPQ_crypto_sign_open(sm, &mlen, sm, smlen, pk);
 

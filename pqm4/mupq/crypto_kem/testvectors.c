@@ -98,9 +98,6 @@ int main(void)
   gpio_mode_setup(GPIOA, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO12);
   gpio_set_output_options(GPIOA,GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, GPIO12);
 
-  //trigger_high();
-  gpio_set(GPIOA, GPIO12);
-
   hal_send_str("==========================");
 
   for(i=0;i<NTESTS;i++)
@@ -108,16 +105,13 @@ int main(void)
     // Key-pair generation
     MUPQ_crypto_kem_keypair(pk, sk_a);
 
-    printbytes(pk,MUPQ_CRYPTO_PUBLICKEYBYTES);
-    printbytes(sk_a,MUPQ_CRYPTO_SECRETKEYBYTES);
-
     for (int j = 0; i < NNOISE; j++) {
-      //trigger_high(); 
-      gpio_set(GPIOA, GPIO12);
-
       // Encapsulation
       MUPQ_crypto_kem_enc(sendb, key_b, pk);
       
+      //trigger_high(); 
+      gpio_set(GPIOA, GPIO12);
+
       // Decapsulation
       MUPQ_crypto_kem_dec(key_a, sendb, sk_a);
 
